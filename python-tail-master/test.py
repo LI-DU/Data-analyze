@@ -9,6 +9,9 @@ import subprocess
 import datetime
 
 
+path = '/home/admin/LOG'
+time_day = datetime.now().strftime('%Y%m%d')
+
 #从日志文件中读取数据
 def get_file_size(new_file):
     fsize = os.path.getsize(new_file)
@@ -17,9 +20,8 @@ def get_file_size(new_file):
  
 def get_the_new_file():
     files = os.listdir(path)
-    time_now = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
     # int_time = int(time_now)
-    files_list = list(filter(lambda x:x[-4:]=='.log' and x[0:8]==time_now, files))
+    files_list = list(filter(lambda x:x[-4:]=='.log' and x[0:8]==time_day, files))
     files_list.sort(key=lambda fn:os.path.getmtime(path + '/' + fn) if not os.path.isdir(path + '/' + fn) else 0)
     new_file = os.path.join(path, files_list[-1])
     return new_file
@@ -35,10 +37,9 @@ def pg_data_to_elk():
                     break
         time.sleep(3)
 
-path = '/home/admin/LOG'
 pg_data_to_elk()
 
-
+#--------------------------------
 #linux中实时读取日志
 import subprocess
 import time
