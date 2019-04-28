@@ -5,23 +5,23 @@
 查询周围5km公司运营的充电站，如果能查到，将站点名称返回"""
 
 import os
-import re
 import time
 import codecs
 import sys
 import types
 import pymysql
+import json
 import subprocess
 import numpy as np
 import pandas as pd
-from flask import Flask
 from flask import render_template
-from flask import request
-from flask import url_for
+from flask import Flask,jsonify
+
 from datetime import datetime
 from math import sin, asin, cos, radians, fabs, sqrt,degrees
 
 app=Flask(__name__)
+app.config['JSON_AS_ASCII'] = False
 
 EARTH_RADIUS=6371   #地球半径
 time_day = datetime.now().strftime('%Y%m%d')   #今天日期 
@@ -82,26 +82,43 @@ def cor_areas(coordinate):
 
 
 #将车辆坐标传入mysql数据库查询附近充电站的位置信息
+@app.route('/coordinate',methods=['POST','GET'])
 def mysql_query(cor1_lat,cor1_lng,cor2_lat,cor2_lng):
     # sql中查询在此坐标5km范围内的充电站坐标
     db = pymysql.connect(host='106.15.223.235', port=3306, user='readonly', password='abc123$%',
                 database='renwochong', charset='utf8')
     cursor = db.cursor()
 
-    select_cord = """select longitude,latitude from t_charging_station where latitude > %f and latitude < %f and longitude > %f and longitude < %f"""%(cor2_lat,cor1_lat,cor1_lng,cor2_lng)
+    select_cord = """select cast(longitude AS CHAR ),cast(latitude AS CHAR ) from t_charging_station where latitude > %f and latitude < %f and longitude > %f and longitude < %f"""%(cor2_lat,cor1_lat,cor1_lng,cor2_lng)
     #执行相关查询
     try:
-        res = cursor.execute(select_cord)
+        res_exc = cursor.execute(select_cord)
         res = cursor.fetchall()
-        return res
+        list_res = list(res)
+        list01 = []
+        for i in range(len(list_res)):
+            coor = {'lng': float(list_res[i][0]), 'lat': float(list_res[i][1])}
+            list01.append(coor)
+        dic = {'coordinate': list01}
+        return jsonify(dic)
+
     except Exception as e:
         print(e)
 
-
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,session_id')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS,HEAD')
+    # 这里不能使用add方法，否则会出现 The 'Access-Control-Allow-Origin' header contains multiple values 的问题
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
 
 #主函数部分
 if __name__ == '__main__':
     path = '/home/admin/LOG'
     distance = 5  #车辆周围距离5km
-    app.run()
+    app.run(
+        host='localhost',
+        port=8000,
+        debug=True)
     
