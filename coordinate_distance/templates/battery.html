@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>进度条</title>
+</head>
+
+
+<style type="text/css">
+    .battery_container{
+        float:left;
+        width:50px;
+        border:1px solid #6C9C2C;
+        height:10px;
+    }
+    #battery_bar{
+        background:chartreuse;
+        float:left;
+        height:100%;
+        text-align:center;
+        line-height:100%;
+    }
+</style>
+
+<body>
+    <script src="../static/js/jquery-3.2.1.min.js"></script>
+    <script src="../static/js/layer.js"></script>
+
+    <div class="battery_container">
+    <div id="battery_bar" style="width:100%;"></div>
+    </div>
+    <span id="total"></span>
+
+
+<script type="text/javascript">
+    function run(){
+        var battery_bar = document.getElementById("battery_bar");
+        var total = document.getElementById("total");
+        battery_bar.style.width=parseInt(battery_bar.style.width) - 1 + "%";
+
+        if (battery_bar.style.width < "30%" && battery_bar.style.width > "10%" ) {
+            layer.msg("<em style='color:red'>" + "电量过低，请及时就近充电", {time: 5000, icon: 1})
+            return
+        }
+
+
+        total.innerHTML = battery_bar.style.width;
+        if(battery_bar.style.width == "100%"){
+            window.clearTimeout(timeout);
+            return;
+        }
+        //控制数字变化的速度
+        var timeout=window.setTimeout("run()",100);
+    }
+    window.onload = function(){
+        run();
+    }
+
+</script>
+
+</body>
+</html>
