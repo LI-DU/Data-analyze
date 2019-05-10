@@ -26,12 +26,6 @@ app.config['JSON_AS_ASCII'] = False
 EARTH_RADIUS=6371   #地球半径
 time_day = datetime.now().strftime('%Y%m%d')   #今天日期 
 
-#获取日志文件大小
-def get_file_size(new_file):
-    fsize = os.path.getsize(new_file)
-    fsize = fsize/float(1024*1024)    #计算日志文件大小，以M为单位
-    return fsize
-
 #获取当天最新生成的日志文件
 def get_the_new_file():
     files = os.listdir(path)
@@ -39,6 +33,12 @@ def get_the_new_file():
     files_list.sort(key=lambda fn:os.path.getmtime(path + '/' + fn) if not os.path.isdir(path + '/' + fn) else 0)
     new_file = os.path.join(path, files_list[-1])    #汇总今天生成的日志，并取最新生成的日志返回
     return new_file
+
+#获取日志文件大小
+def get_file_size(new_file):
+    fsize = os.path.getsize(new_file)
+    fsize = fsize/float(1024*1024)    #计算日志文件大小，以M为单位
+    return fsize
 
 #读取当天最新的日志文件，系统默认20M分割一个日志文件，
 # 如果文件大小大于20M，则自动结束读取当前文件，转到读取下个生成的文件

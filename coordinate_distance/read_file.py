@@ -1,30 +1,34 @@
-import os
 import time
-import pandas as pd
-import pymongo
-from flask import Flask, jsonify,render_template
-from datetime import datetime
-from math import sin, asin, cos, radians, fabs, sqrt,degrees
+from apscheduler.schedulers.blocking import BlockingScheduler
+from pymongo import MongoClient,InsertOne
 
-EARTH_RADIUS=6371
-distance = 5
-time_day = datetime.now().strftime('%Y%m%d')   #今天日期
+def insert_tel():
+    #连接数据库
+    conn_mongo = MongoClient('127.0.0.1:27017',maxPoolSize=None)
+    db_mon = conn_mongo.python_test #database
+    db_collection = db_mon.test_01 #table
 
-app = Flask(__name__)
+    power = 20
+    tel = 110
+    # 查询
+    query_mon = db_collection.find_one({'tel':tel})
+    #如果查到号码信息，执行更新
+    if query_mon:
+        # db_collection.update_one({'tel': tel}, {'$set': {'power': 20}})
+        if power == 20:
+            select()
 
-@app.route('/',methods=['POST','GET'])
-def power():
-    df = pd.read_csv('D:/coordinate/log/2019042810.txt', encoding='utf-8')
-    for i in range(len(df)):
-        power = df.loc[i][1]
-        print(power)
-        if power > 30:
-            break
-        power_data = {'power':power}
-        return jsonify(power_data)
+    #如果没查到，执行插入号码信息
+    else:
+        #插入数据
+        insert_mon = db_collection.insert_one({'tel':tel,'power':28})
+        print('insert---',query_mon)
 
+
+def select():
+    coor = 120.18201
+    print(coor)
+    return coor
 
 if __name__ == '__main__':
-    app.run()
-
-
+    insert_tel()
