@@ -131,6 +131,13 @@
     background-color: #fcf8e3;
     border-color: gold;
 }
+/*
+.alert-warning3 {
+    color: black;
+    background-color: #ff11ff;
+    border-color: gold;
+}
+*/
 
 </style>
 </head>
@@ -146,9 +153,9 @@
                     battery_bar1.style.width = parseInt(battery_bar1.style.width) - 1 + "%";
         total1.innerHTML = battery_bar1.style.width;
 
-        //监控电量显示，如果如果电量低于某一设定值，弹出提示信息
-        if (battery_bar1.style.width < "30%" && battery_bar1.style.width > "10%") {
-            $('.alert').html('车辆01，您车辆电量过低，附近5km有可用充电站，请及时充电').addClass('alert-warning').show().delay(2500).fadeOut();
+        //监控电量显示，如果电量低于某一设定值，弹出提示信息
+        if (battery_bar1.style.width < "30%" && battery_bar1.style.width > "25%") {
+            $('.alert').html('车辆01，您车辆电量过低，附近5km有可用充电站，请及时充电').addClass('alert-warning').show().delay(1000).fadeOut();
         }
         if (battery_bar1.style.width == "0%") {
             battery_bar1.style.width = "100%"
@@ -160,10 +167,11 @@
                     battery_bar2.style.width = parseInt(battery_bar2.style.width) - 1 + "%";
         total2.innerHTML = battery_bar2.style.width;
 
-        //监控电量显示，如果如果电量低于某一设定值，弹出提示信息
-        if (battery_bar2.style.width < "30%" && battery_bar2.style.width > "10%") {
-            $('.alert').html('车辆02，您车辆电量过低，附近5km有可用充电站，请及时充电').addClass('alert-warning').show().delay(2500).fadeOut();
+        //监控电量显示，如果电量低于某一设定值，弹出提示信息
+        if (battery_bar2.style.width < "30%" && battery_bar2.style.width > "25%") {
+            $('.alert').html('车辆02，您车辆电量过低，附近5km有可用充电站，请及时充电').addClass('alert-warning').show().delay(1000).fadeOut();
         }
+
         if (battery_bar2.style.width == "0%") {
             battery_bar2.style.width = "100%"
         }
@@ -174,9 +182,12 @@
         battery_bar3.style.width = parseInt(battery_bar3.style.width) - 1 + "%";
         total3.innerHTML = battery_bar3.style.width;
 
-        //监控电量显示，如果如果电量低于某一设定值，弹出提示信息
-        if (battery_bar3.style.width < "30%" && battery_bar3.style.width > "10%") {
-            $('.alert').html('车辆03，您车辆电量过低，附近5km有可用充电站，请及时充电').addClass('alert-warning').show().delay(2500).fadeOut();
+        //监控电量显示，如果电量低于某一设定值，弹出提示信息
+        if (battery_bar3.style.width < "30%" && battery_bar3.style.width > "25%") {
+            $('.alert').html('车辆03，您车辆电量过低，附近5km有可用充电站，请及时充电').addClass('alert-warning').show().delay(1000).fadeOut();
+        }
+        if (battery_bar3.style.width == "78%" || battery_bar3.style.width == "62%" || battery_bar3.style.width == "16%"){
+            $('.alert').html('车辆03，您附近5km有可用充电站，可前去充电').addClass('alert-warning').show().delay(1000).fadeOut();
         }
         //循环显示
         if (battery_bar3.style.width == "0%") {
@@ -186,8 +197,8 @@
 
     window.onload = function () {
     //控制数字变化的速度
-    window.setInterval("run01()", 145);
-    window.setInterval("run02()", 330);
+    window.setInterval("run01()", 180);
+    window.setInterval("run02()", 350);
     window.setInterval("run03()", 270);
     //run03();
     }
@@ -311,7 +322,7 @@
         //对线路,创建巡航器
             var navg1 = pathSimplifierIns.createPathNavigator(0, {
                 loop: true,
-                speed: 1800,
+                speed: 1500,
                 pathNavigatorStyle: {
                     width: 30,
                     height: 36,

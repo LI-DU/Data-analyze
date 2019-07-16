@@ -60,30 +60,29 @@ def tail_cor_log():
                 lat = float(pd_line.loc[1])           #取坐标数据的纬度
                 lng = float(pd_line.loc[2])
                 coordinate = (vin,lat,lng)
-                cor_areas(coordinate)
-
-        time.sleep(2)
 
 
-#计算坐标点周围5km，东西两侧距离,lat表示纬度，lng表示经度
-def cor_areas(coordinate):
-        dlng = 2 * asin(sin(distance / (2 * EARTH_RADIUS)) / cos(coordinate[1]))
-        dlng = degrees(dlng)        # 弧度转换成角度
+                # 计算坐标点周围5km，东西两侧距离,lat表示纬度，lng表示经度
+                dlng = 2 * asin(sin(distance / (2 * EARTH_RADIUS)) / cos(coordinate[1]))
+                dlng = degrees(dlng)  # 弧度转换成角度
 
-        #计算坐标点周围5km，南北两侧距离坐标
-        dlat = distance / EARTH_RADIUS
-        dlat = degrees(dlat)     # 弧度转换成角度
-        
-        #cor1左上角坐标点，cor2右下角坐标点
-        cor1_lat,cor1_lng = coordinate[1] + dlat,coordinate[2] - dlng
-        cor2_lat,cor2_lng = coordinate[1] - dlat,coordinate[2] + dlng
+                # 计算坐标点周围5km，南北两侧距离坐标
+                dlat = distance / EARTH_RADIUS
+                dlat = degrees(dlat)  # 弧度转换成角度
 
-        mysql_query(cor1_lat,cor1_lng,cor2_lat,cor2_lng)
+                # cor1左上角坐标点，cor2右下角坐标点
+                cor1_lat, cor1_lng = coordinate[1] + dlat, coordinate[2] - dlng
+                cor2_lat, cor2_lng = coordinate[1] - dlat, coordinate[2] + dlng
+                coor = cor1_lat, cor1_lng, cor2_lat, cor2_lng
+                return coor
 
 
 #将车辆坐标传入mysql数据库查询附近充电站的位置信息
 @app.route('/coordinate',methods=['POST','GET'])
-def mysql_query(cor1_lat,cor1_lng,cor2_lat,cor2_lng):
+def mysql_query():
+
+    coor_t = tail_cor_log()
+    cor1_lat, cor1_lng, cor2_lat, cor2_lng = coor_t
     # sql中查询在此坐标5km范围内的充电站坐标
     db = pymysql.connect(host='106.15.223.235', port=3306, user='readonly', password='abc123$%',
                 database='renwochong', charset='utf8')

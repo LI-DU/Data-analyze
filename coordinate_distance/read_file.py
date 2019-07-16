@@ -1,34 +1,27 @@
-import time
-from apscheduler.schedulers.blocking import BlockingScheduler
-from pymongo import MongoClient,InsertOne
+import pymongo
 
-def insert_tel():
-    #连接数据库
-    conn_mongo = MongoClient('127.0.0.1:27017',maxPoolSize=None)
-    db_mon = conn_mongo.python_test #database
-    db_collection = db_mon.test_01 #table
+# 配置数据库信息
+mongo_host = 'localhost'
+mongo_db = 'python_test' # 数据库名
+mongo_tb = 'python_test' # 表名
 
-    power = 20
-    tel = 110
-    # 查询
-    query_mon = db_collection.find_one({'tel':tel})
-    #如果查到号码信息，执行更新
-    if query_mon:
-        # db_collection.update_one({'tel': tel}, {'$set': {'power': 20}})
-        if power == 20:
-            select()
+# 连接数据库
+client = pymongo.MongoClient(mongo_host)
+db = client[mongo_db]
 
-    #如果没查到，执行插入号码信息
-    else:
-        #插入数据
-        insert_mon = db_collection.insert_one({'tel':tel,'power':28})
-        print('insert---',query_mon)
+# 存入数据库
+def save_url_to_Mongo(data):
+    try:
+        if db[mongo_tb].find_one(data):
+            print('有此条数据', data)
+            db[mongo_tb].update_one(data)
+        else:
+            print('之前没有此条数据', data)
+            db[mongo_tb].insert(data)
+    except Exception:
+        print('存储到MongoDb失败')
+
+data = {'num':1234}
+save_url_to_Mongo(data)
 
 
-def select():
-    coor = 120.18201
-    print(coor)
-    return coor
-
-if __name__ == '__main__':
-    insert_tel()

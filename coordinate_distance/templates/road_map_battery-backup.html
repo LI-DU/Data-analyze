@@ -1,0 +1,401 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>运动轨迹展示和电池电量显示</title>
+
+    <style type="text/css">
+    html,
+    body,
+    /*页面大小设置*/
+    #container {
+        width: 100%;
+        height: 100%;
+        margin: 0.1px
+    }
+
+    #loadingTip {
+    position: absolute;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    padding: 3px 10px;
+    background: red;
+    color: #fff;
+    font-size: 14px;
+}
+/*车辆模拟按钮*/
+    .btn-group{
+      position:absolute;
+      z-index: 10;
+      right: 60px;
+      bottom:10px;
+    }
+    .btn-group button{
+      background-color:cornflowerblue;
+      color:#5f0;
+    }
+
+    /*电量进度条所在的信息框*/
+    .div-relative{position:absolute;
+        z-index:100;
+        left: 30px;
+        top:30px;
+        background: floralwhite;
+        border:2px solid #55f;
+        width:150px;
+        height:160px
+    }
+
+/*进度条显示*/
+    /*进度条01*/
+    .battery_container01{
+        position:absolute;
+        z-index: 20;
+        left: 10px;
+        top:30px;
+        width:60px;
+        border:1px solid #f82;
+        height:10px;
+
+    }
+    #battery_bar01{
+        background:#3300ff;
+        float:left;
+        height:100%;
+        text-align:center;
+        line-height:100%;
+    }
+
+    /*进度条02*/
+    .battery_container02{
+        position:absolute;
+        z-index: 20;
+        left: 10px;
+        top:70px;
+        width:60px;
+        border:1px solid #f82;
+        height:10px;
+
+    }
+    #battery_bar02{
+        background:#329262;
+        float:left;
+        height:100%;
+        text-align:center;
+        line-height:100%;
+    }
+
+    /*进度条03*/
+    .battery_container03{
+        position:absolute;
+        z-index: 20;
+        left: 10px;
+        top:110px;
+        width:60px;
+        border:1px solid #f82;
+        height:10px;
+
+    }
+    #battery_bar03{
+        background: #ff11ff;
+        float:left;
+        height:100%;
+        text-align:center;
+        line-height:100%;
+    }
+
+    /*消息弹框*/
+    #getVerifyCode{cursor: pointer; outline: none;}
+    	.alert {
+    display: none;
+    position: fixed;
+    top: 40%;
+    left: 20%;
+    min-width: 100px;
+    margin-left: -100px;
+    z-index: 999;
+    padding: 12px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+.alert-warning {
+    color: red;
+    background-color: #fcf8e3;
+    border-color: gold;
+}
+
+</style>
+</head>
+
+<body>
+//信息弹框
+<div class="alert"></div>
+
+//电量进度信息显示
+<script type="text/javascript">
+    function run01() {
+        var battery_bar1 = document.getElementById("battery_bar01");
+        var total1 = document.getElementById("total_01");
+                    battery_bar1.style.width = parseInt(battery_bar1.style.width) - 1 + "%";
+        total1.innerHTML = battery_bar1.style.width;
+        if (battery_bar1.style.width == "100%") {
+            window.clearTimeout(timeout);
+            return;
+        }
+        //监控电量显示，如果如果电量低于某一设定值，弹出提示信息
+        if (battery_bar1.style.width < "30%" && battery_bar1.style.width > "10%") {
+            $('.alert').html('车辆01电量过低，请及时就近充电').addClass('alert-warning').show().delay(2500).fadeOut();
+        }
+        //控制数字变化的速度
+        var timeout = window.setTimeout("run01()", 150);
+        }
+
+    function run02() {
+        var battery_bar2 = document.getElementById("battery_bar02");
+        var total2 = document.getElementById("total_02");
+                    battery_bar2.style.width = parseInt(battery_bar2.style.width) - 1 + "%";
+        total2.innerHTML = battery_bar2.style.width;
+        if (battery_bar2.style.width == "100%") {
+            window.clearTimeout(timeout);
+            return;
+        }
+        //监控电量显示，如果如果电量低于某一设定值，弹出提示信息
+        if (battery_bar2.style.width < "30%" && battery_bar2.style.width > "10%") {
+            $('.alert').html('车辆02电量过低，请及时就近充电').addClass('alert-warning').show().delay(2500).fadeOut();
+        }
+        //控制数字变化的速度
+        var timeout = window.setTimeout("run02()", 135);
+        }
+    function run03() {
+        var battery_bar3 = document.getElementById("battery_bar03");
+        var total3 = document.getElementById("total_03");
+        battery_bar3.style.width = parseInt(battery_bar3.style.width) - 1 + "%";
+        total3.innerHTML = battery_bar3.style.width;
+        if (battery_bar3.style.width == "100%") {
+            window.clearTimeout(timeout);
+            return;
+        }
+        //监控电量显示，如果如果电量低于某一设定值，弹出提示信息
+        if (battery_bar3.style.width < "30%" && battery_bar3.style.width > "10%") {
+            $('.alert').html('车辆03电量过低，请及时就近充电').addClass('alert-warning').show().delay(2500).fadeOut();
+        }
+        //控制数字变化的速度
+        var timeout = window.setTimeout("run03()", 200);
+    }
+        for (var i = 0; i <100; i++) {
+            window.onload = function () {
+                run01();
+                run02();
+                run03();
+            }
+        }
+
+
+</script>
+
+    <div id="container"></div>
+    <div class="btn-group">
+      <button class="btn-car1">车辆模拟</button>
+    </div>
+
+    <div class="div-relative">车辆电池电量显示
+    <div class="battery_container01">
+    <div id="battery_bar01" style="width:100%;"></div>
+    <div style="font-size:12px">car01 <span style="font-size:12px" id="total_01"></span></div>
+    </div>
+
+    <div class="battery_container02">
+    <div id="battery_bar02" style="width:100%;"></div>
+    <div style="font-size:12px">car02 <span style="font-size:12px" id="total_02"></span></div>
+    </div>
+
+    <div class="battery_container03">
+    <div id="battery_bar03" style="width:100%;"></div>
+    <div style="font-size:12px">car03 <span style="font-size:12px" id="total_03"></span></div>
+    </div>
+    </div>
+
+    <script type="text/javascript" src='https://webapi.amap.com/maps?v=1.4.4&key=1ef4feb796dad8d6892708ab9bc1a8f2'></script>
+    <!-- UI组件库 1.0 -->
+    <script src="https://webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
+    <script type="text/javascript">
+
+    //创建地图
+    var map = new AMap.Map('container', {
+        zoom: 8
+    });
+    //轨迹渲染函数
+        AMapUI.load(['ui/misc/PathSimplifier', 'lib/$'], function (PathSimplifier, $) {
+            if (!PathSimplifier.supportCanvas) {
+                alert('当前环境不支持 Canvas！');
+                return;
+            }
+        //道路轨迹颜色，just some colors
+        var colors = [
+        "#3366cc", "#109618", "#990099", "#329262", "#5574a6", "#3b3eac","#0099c6",
+        "#316395", "#22aa99", "#6633cc", "#e67300", "#8b0707", "#651067"
+        ];
+
+        var pathSimplifierIns = new PathSimplifier({
+        zIndex: 100,
+        //autoSetFitView:false,
+        map: map, //所属的地图实例
+
+        getPath: function(pathData, pathIndex) {
+            return pathData.path;
+        },
+        getHoverTitle: function(pathData, pathIndex, pointIndex) {
+
+            if (pointIndex >= 0) {
+                //point
+                return pathData.name + '，点：' + pointIndex + '/' + pathData.path.length;
+            }
+            return pathData.name + '，点数量' + pathData.path.length;
+        },
+
+            //线路颜色和样式
+            renderOptions: {
+                pathLineStyle: {
+                    dirArrowStyle: true
+                },
+                getPathStyle: function (pathItem, zoom) {
+                    var color = colors[pathItem.pathIndex % colors.length],
+                        lineWidth = Math.round(4 * Math.pow(1.1, zoom - 3));
+
+                    return {
+                        pathLineStyle: {
+                            strokeStyle: color,
+                            lineWidth: lineWidth
+                        },
+                        pathLineSelectedStyle: {
+                            lineWidth: lineWidth + 2
+                        },
+                        pathNavigatorStyle: {
+                            fillStyle: color
+                        }
+                    };
+                }
+            }
+        });
+
+        window.pathSimplifierIns = pathSimplifierIns;
+        //加载道路坐标数据
+        $('<div id="loadingTip">加载数据，请稍候...</div>').appendTo(document.body);
+        $.getJSON('../static/path_data.json', function(d) {
+           $('#loadingTip').remove();
+
+            for (var i = 0, len = d.length; i < len; i++) {
+                if (d[i].length >= 0) {
+                    d.splice(i, 0, {
+                        name:d[i].name,
+                        path: PathSimplifier.getGeodesicPath(
+                            d[i].path[0], d[i].path[d[i].path.length - 1], 100)
+                    });
+                    i++;
+                    len++;
+                }
+            }
+
+        pathSimplifierIns.setData(d);
+        //initRoutesContainer(d);
+        function onload() {
+            pathSimplifierIns.renderLater();
+        }
+        function onerror(e) {
+            alert('图片加载失败！');
+        }
+
+        //对线路,创建巡航器
+            var navg1 = pathSimplifierIns.createPathNavigator(0, {
+                loop: true,
+                speed: 1800,
+                pathNavigatorStyle: {
+                    width: 28,
+                    height: 32,
+                    //使用图片
+                    content: PathSimplifier.Render.Canvas.getImageContent('../static/pic/black_car02.svg', onload, onerror),
+                    strokeStyle: null,
+                    fillStyle: null,
+                    //经过路径的样式
+                    pathLinePassedStyle: {
+                        lineWidth: 6,
+                        strokeStyle: 'black',
+                        dirArrowStyle: {
+                            stepSpace: 15,
+                            strokeStyle: 'red'
+                        }
+                    }
+                }
+            });
+
+            navg1.start();
+
+            var navg2 = pathSimplifierIns.createPathNavigator(1, {
+                loop: true,
+                speed: 1200,
+                pathNavigatorStyle: {
+                    width: 16,
+                    height: 32,
+                    content: PathSimplifier.Render.Canvas.getImageContent('../static/pic/red_car.png', onload, onerror),
+                    strokeStyle: null,
+                    fillStyle: null,
+                    //经过路径的样式
+                    pathLinePassedStyle: {
+                        lineWidth: 6,
+                        strokeStyle: 'black',
+                        dirArrowStyle: {
+                            stepSpace: 15,
+                            strokeStyle: 'white'
+                        }
+                    }
+                }
+            });
+
+            navg2.start();
+
+            var navg3 = pathSimplifierIns.createPathNavigator(2, {
+                loop: true,
+                speed: 900,
+                pathNavigatorStyle: {
+                    autoRotate: false, //禁止调整方向
+                    width: 30,
+                    height: 36,
+                    //使用图片
+                    content: PathSimplifier.Render.Canvas.getImageContent('../static/pic/yellow_car01.svg', onload, onerror),
+                    fillStyle: null,
+                    //车辆经过后路径的样式
+                    pathLinePassedStyle: {
+                    lineWidth: 6,
+                    strokeStyle: 'gray',
+                    dirArrowStyle: {
+                        stepSpace: 15,
+                        strokeStyle: 'yellow'
+                    }
+                    }
+
+                }
+            });
+
+            navg3.start();
+        });
+
+        map.setFitView();//根据地图上添加的覆盖物分布情况，自动缩放地图到合适的视野级别，参数overlayList默认为当前地图上添加的所有覆盖物图层
+    });
+
+    //添加缩放按钮
+    AMap.plugin([
+        'AMap.ToolBar'
+    ], function () {
+        // 在图面添加工具条控件，工具条控件集成了缩放、平移、定位等功能按钮在内的组合控件
+        map.addControl(new AMap.ToolBar({
+            // 简易缩放模式，默认为 false
+            liteStyle: true
+        }));
+    })
+
+</script>
+</body>
+</html>
+

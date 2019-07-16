@@ -1,0 +1,102 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css" />
+    <title>地图显示</title>
+    <style>
+        html,
+        body,
+        #container {
+          width: 100%;
+          height: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="container"></div>
+    <script src="https://webapi.amap.com/maps?v=1.4.14&key=1ef4feb796dad8d6892708ab9bc1a8f2"></script>
+    <script src="../static/js/marker.js"></script>
+    <script src="../static/js/jQuery_v1.12.4.js"></script>
+    <script type="text/javascript">
+
+        //地图初始化
+        var map = new AMap.Map("container", {
+                resizeEnable: true,
+                zoom: 10
+        });
+        //添加缩放按钮
+        AMap.plugin([
+        'AMap.ToolBar'
+    ], function(){
+        // 在图面添加工具条控件，工具条控件集成了缩放、平移、定位等功能按钮在内的组合控件
+        map.addControl(new AMap.ToolBar({
+            // 简易缩放模式，默认为 false
+            liteStyle: true
+        }));
+    });
+
+        $(function() {
+            $.ajax({
+                url: "http://localhost:8000/",//后台的接口
+                type: 'post',
+                dataType: 'json'
+            })
+                .done(function(data){
+                    for(var i=0;i<data.coordinate.length;i++) {
+                        latit = data.coordinate[i].lng;
+                        lngt = data.coordinate[i].lat;
+                        var marker = new AMap.Marker({
+                            position: [latit, lngt],
+                            title: '充电站标记',
+                            map: map
+                        });
+                        //marker.setLabel({content: "鼎充充电站"})
+                    }
+                })
+                 .fail(function(error){
+                    console.log(error)
+                })
+
+        });
+
+
+    var list = [{lng:119.065261, lat:31.651805},{lng:119.035263, lat:31.661806},{lng:119.045262, lat:31.641803},{lng:119.035262, lat:31.621803}];
+    for(var i=0;i<list.length;i++){
+        var element = list[i];
+        var marker = new AMap.Marker({
+            position: new AMap.LngLat(element.lng, element.lat),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+            //title: '充电站',
+            map:map,
+            icon: new AMap.Icon({
+                //image: "http://webapi.amap.com/theme/v1.3/images/newpc/way_btn2.png",
+                image: "../static/didi_car.png",
+                size: new AMap.Size(64, 64),  //图标大小
+                imageSize: new AMap.Size(30,30)
+        })
+
+        });
+        //marker.setLabel({content: "新能源汽车"}),
+
+        // 将创建的点标记添加到已有的地图实例：
+        map.add(marker);
+        //marker.setLabel({content: "car01"})
+    }
+
+
+/*
+        //--动态刷新页面
+        function myrefresh()
+        {
+        window.location.reload();
+        }
+        setTimeout('myrefresh()',8000); //指定5秒刷新一次
+*/
+
+    </script>
+
+</body>
+</html>
