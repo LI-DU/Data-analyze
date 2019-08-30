@@ -1,0 +1,194 @@
+# Python 网络爬虫实战与数据可视化
+
+本仓库主要涵盖作者实践 python  网络爬虫与数据可视化的实例，代码示例仅供分享与学习使用，**不可用于任何商业目的**
+
+## 全国电动汽车充电站数据爬取
+
+> 第一个爬虫实战示例，具体细节可参考[爬虫实战：全国电动汽车充电站数据](http://equations.online/2018/12/09/chargebar/)
+
+爬取对象为北汽新能源[网站](http://www.bjev520.com/jsp/beiqi/pcmap/do/index.jsp)提供的数据，简单的可视化后效果
+
+<img src="https://i.loli.net/2018/12/15/5c14dfa87fdc8.png" width="700px" />
+
+> 这点数据直接手工录入不就好了吗 :dizzy_face:
+
+### 环境配置
+
+本仓库示例代码均在 python 3.5 上运行测试，执行程序前请**安装代码中程序包**
+
+```
+pip install --upgrade pip
+pip install \
+    xlwt \
+    argparse \
+    requests \
+    geocoder \
+    bs4 \
+    selenium \
+    geopy \
+    xlrd \
+    numpy \
+    pandas \
+    folium \
+    lxml \
+    sklearn
+```
+
+> pandas requires Python '>=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*'
+
+然后先克隆项目内容
+
+```git
+git clone https://github.com/Equationliu/Webscrapy.git
+```
+
+#### chrome driver
+
+##### Windows 安装
+
+从[官网](http://chromedriver.chromium.org/downloads)上下载最新版本后解压至项目路径 `./chargebar/` 即可
+
+##### ubuntu 安装
+
+前往[官网](http://npm.taobao.org/mirrors/chromedriver/)下载驱动并解压
+
+<img src="https://img-blog.csdn.net/20180321101743179?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2ZlbmdsdHh4/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="700px" />
+
+关键步骤就是将其加入路径，ubuntu下使用以下方式可以以管理员模式打开文件系统从而避免权限问题
+
+```bash
+sudo nautilus
+```
+
+然后将解压后的文件移动到 ` /usr/bin` 路径
+
+> 测试时发现ubuntu下绘图时中文会出现乱码，参考[解决方案](https://blog.csdn.net/jeff_liu_sky_/article/details/54023745) 安装字体即可
+
+并修改以下两处代码：(89-92,142-145行)
+
+```python
+# Windows 用户
+driver = webdriver.Chrome('chromedriver.exe', options=chrome_options)
+# ubuntu 用户，确保已经添加驱动到了路径
+# driver = webdriver.Chrome('chromedriver', options=chrome_options)
+```
+
+### 开始爬取
+
+```bash
+cd chargebar
+python chargebar_scrapy_main.py -h 
+```
+
+以上可获取帮助文档：
+
+> usage: chargebar_scrapy_main.py [-h][--range RANGE] [--Retry_max RETRY_MAX][--convert CONVERT] [--ak AK]
+>
+> chargebar scrapy
+>
+> 1. **--range** ：the range you want to Grab, set '--range =全国' to
+>    ​  grab all of the Charging piles of China
+> 2.  -**-Retry_max** ：max times of retring to Convert coordinates
+> 3. **--convert** whether get the Latitude and longitude
+> 4. -**-ak** ：  Baidu API
+
+ 其中`--range` 设定为爬取的范围，若只需要获得全国各省份的总数据则设置`--range=全国` ，若须获得某省份具体充电桩数据，则设置 `--range=湖南省` ,不指定则缺省为青海省
+
+`--Retry_max` 缺省为 3，可不必调整，防止调用百度API时某一次无法返回经纬度
+
+`--convert` 控制是否调用百度 API 实现地址转经纬度，缺省为 NO
+
+如果你设置了 `--convert=Yes` ，请务必输入你的百度 ak，`--ak=这里是你的ak` 因为缺省的是一串无效字符
+
+**示例：**
+
+```bash
+python chargebar_scrapy_main.py --range=全国   ## 获取各省份充电站总数据
+python chargebar_scrapy_main.py --range=云南省   ## 获取云南省充电桩
+python chargebar_scrapy_main.py --range=云南省 --convert=Yes --ak=你的ak    ## 获取云南省充电桩并调用百度API转换地址为经纬度
+```
+
+> 注意：百度API 一天进行经纬度转换次数上限是6000次，也就是说一个 ak 无法获得全国所有数据
+
+其中数目较多的北京省数据抓取时间
+
+```
+grabing complete in 17m 60s
+```
+
+### 数据清洗
+
+执行上述程序将在目录 `./chargebar/result/` 下生成各省份数据文件，之所以要进行数据洗涤是因为部分充电站所给的地址不够准确导致百度API无法进行转换，可能会有如下报错：
+
+```
+百度找不到这个地方呢！或 API 额度已超限！
+百度找不到这个地方呢！或 API 额度已超限！
+百度找不到这个地方呢！或 API 额度已超限！
+```
+
+除此之外，即便是识别出了地址，地址也不一定准确，实验发现部分省份的数据竟指向了其他省份，并且数量并不低，再修改正则表达式较比较繁琐，而且出于学习角度并不需要十分精确的数据，故而使用了 [离群点检测（LOF）](https://zhuanlan.zhihu.com/p/37753692) 进行一个数据的清洗
+
+```
+python wash_data.py
+```
+
+> 实验发现发生了大偏差的数据点离群因子会非常高，根据实验取 $k=8$ ,即离群因子大于 8 认为数据没有偏差
+
+以上海市和山西省为例
+
+<img src="https://i.loli.net/2018/12/15/5c14d9f340d03.png" width="700px" />
+
+> 可以清楚的看出上海市的部分离群点与大部分点相差巨大，经实验发现山西的所有点确实在省内，不属于**省级的离群点** 。
+
+### 可视化
+
+清洗数据的代码 `wash_data.py` 中会绘制数据的热力图
+
+<img src="https://i.loli.net/2018/12/15/5c14dd983934e.jpg" width="700px" />
+
+可见快充和慢充还是不太一样的，快充就只有北京最为“燥热”
+
+但是感觉上述可视化还不够呀，至少不够震撼，下面该 Echarts 登场了
+
+## Echarts
+
+python 中有针对 Echarts 专门开发的 pyecharts，可参考[中文文档](http://pyecharts.org/#/zh-cn/prepare)
+
+<img src="https://i.loli.net/2018/12/15/5c151ff933e29.png" width="700px" />
+
+但是上述实现由于点之间相互遮挡反而不是很直观，这时候新版本的 echarts 的混合模式：blendmode 便很有用了，具体实现可以参照[ECharts 实现地图散点图](http://echarts.baidu.com/blog/2016/04/28/echarts-map-tutorial.html) 以及 [官方GL散点图](http://www.echartsjs.com/examples/editor.html?c=scatterGL-gps&gl=1)
+
+<img src="https://i.loli.net/2018/12/15/5c151ff928083.png" width="700px" />
+
+这样便有**叠加变亮**的效果了，但是由于分布太过于集中于某些城市，没有官方实例表现效果强（官方数据量大呀~）
+
+最后送上一个各地[地图仓库](https://img.hcharts.cn/mapdata/?tdsourcetag=s_pctim_aiomsg)
+
+
+
+
+
+## 博客图片备份
+
+这里便已[自己博客](http://equations.online/tags/)为例，抓取博客中的图片地址后调用IDM下载到本地，主要防止使用的图床突然崩溃:sob:
+
+> 事实是有几张图片已经找不到来源了，，
+
+### 使用
+
+#### 配置IDM
+
+```python
+def download_IDM(DownUrl,DownPath,OutPutFileName):
+    IDM = r'C:\myapp\IDM\IDMan.exe'   # 本地IDM执行文件路径
+    DownPath = r"D:\Image_backup\equation_blog" + DownPath       # 下载路径
+    call([IDM, '/d',DownUrl, '/p',DownPath, '/f', OutPutFileName, '/n'])
+```
+
+#### 执行
+
+```bash
+ cd Ima*
+ python image_backup.py
+```
+
