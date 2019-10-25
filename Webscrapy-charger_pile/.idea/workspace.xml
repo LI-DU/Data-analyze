@@ -21,8 +21,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/chargebar/chargestation_scrapy_main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-386">
-              <caret line="71" lean-forward="true" selection-start-line="71" selection-end-line="71" />
+            <state relative-caret-position="253">
+              <caret line="107" column="66" lean-forward="true" selection-start-line="107" selection-start-column="66" selection-end-line="107" selection-end-column="66" />
               <folding>
                 <element signature="e#24#33#0" expanded="true" />
               </folding>
@@ -86,6 +86,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -102,14 +103,13 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../python-tail" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunDashboard">
@@ -266,6 +266,7 @@
       <workItem from="1566346539501" duration="23360000" />
       <workItem from="1566435199342" duration="7326000" />
       <workItem from="1569378171394" duration="1850000" />
+      <workItem from="1571120355851" duration="835000" />
     </task>
     <task id="LOCAL-00001" summary="scrapy chargepile">
       <created>1566347188773</created>
@@ -278,12 +279,12 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="37884000" />
+    <option name="totallyTimeSpent" value="38719000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1295" height="704" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16329831" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16572352" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -345,23 +346,8 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/chargebar/baidumap_chargepile.py" />
-    <entry file="file://$USER_HOME$/Downloads/kfcscrape-master/kfcscrape/spiders/baidukfc.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="15" column="37" lean-forward="true" selection-start-line="15" selection-start-column="37" selection-end-line="15" selection-end-column="37" />
-          <folding>
-            <element signature="e#24#37#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Downloads/爬取外卖商家/spider/JianYe.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="15" column="29" lean-forward="true" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/Downloads/kfcscrape-master/kfcscrape/spiders/baidukfc.py" />
+    <entry file="file://$USER_HOME$/Downloads/爬取外卖商家/spider/JianYe.py" />
     <entry file="file://$PROJECT_DIR$/chargebar/wash_data.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -372,16 +358,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Downloads/爬取外卖商家/spider/YuHuaTai.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="779">
-          <caret line="46" selection-start-line="46" selection-end-line="47" selection-end-column="47" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/Downloads/爬取外卖商家/spider/YuHuaTai.py" />
     <entry file="file://$PROJECT_DIR$/chargebar/train_test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="570">
@@ -392,18 +369,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/chargebar/chargermap.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/chargebar/chargestation_scrapy_main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-386">
-          <caret line="71" lean-forward="true" selection-start-line="71" selection-end-line="71" />
+        <state relative-caret-position="253">
+          <caret line="107" column="66" lean-forward="true" selection-start-line="107" selection-start-column="66" selection-end-line="107" selection-end-column="66" />
           <folding>
             <element signature="e#24#33#0" expanded="true" />
           </folding>
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/chargebar/chargermap.py">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
   </component>
 </project>
