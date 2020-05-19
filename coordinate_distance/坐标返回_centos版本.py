@@ -74,8 +74,8 @@ def cor_areas(coordinate):
 # 将车辆坐标传入mysql数据库查询附近充电站的位置信息
 def mysql_query(cor1_lat, cor1_lng, cor2_lat, cor2_lng):
     # sql中查询在此坐标5km范围内的充电站坐标
-    db = pymysql.connect(host='106.15.223.235', port=3306, user='readonly', password='abc123$%',
-                         database='renwochong', charset='utf8')
+    db = pymysql.connect(host='10.x.x.x', port=3306, user='readonly', password='xxxx',
+                         database='xxxx', charset='utf8')
     cursor = db.cursor()
 
     select_cord = """select longitude,latitude from t_charging_station where latitude > %f and latitude < %f and longitude > %f and longitude < %f""" % (
